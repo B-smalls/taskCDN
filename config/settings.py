@@ -35,7 +35,7 @@ INSTALLED_APPS += [
 
 # apps
 INSTALLED_APPS += [
-
+    'coordinatesCity'
 ]
 
 # documantion
