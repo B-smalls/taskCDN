@@ -36,9 +36,11 @@ class CityDeleteView(generics.DestroyAPIView):
     lookup_field = 'cityName'  # Поле, по которому будет осуществляться удаление
 
     def get_object(self):
-        # Переопределяем метод для поиска объекта по `cityName` вместо `id`
         city_name = self.kwargs.get(self.lookup_field)
-        return City.objects.get(cityName=city_name)
+        try:
+            return City.objects.get(cityName=city_name)
+        except City.DoesNotExist:
+            raise NotFound(f"City with name '{city_name}' not found.")
     
 
 @extend_schema_view(
