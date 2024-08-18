@@ -70,3 +70,33 @@ class CityDetailSerializer(serializers.ModelSerializer):
     class Meta:
         model = City
         fields = ['id', 'cityName', 'latitude', 'longitude']
+
+# Сериализатор для нахождения двух ближайших городов
+class NearestCitiesSerializer(serializers.Serializer):
+    latitude = serializers.FloatField()
+    longitude = serializers.FloatField()
+
+    def validate(self, data):
+        latitude = data.get('latitude')
+        longitude = data.get('longitude')
+
+        if latitude is None or longitude is None:
+            raise serializers.ValidationError("Both latitude and longitude are required.")
+        return data
+
+    def get_nearest_cities(self):
+        latitude = self.validated_data.get('latitude')
+        longitude = self.validated_data.get('longitude')
+
+        # Находим два ближайших города по расстоянию от заданных координат
+        cities = City.objects.all()
+        nearest_cities = sorted(cities, key=lambda city: ((city.latitude - latitude) ** 2 + (city.longitude - longitude) ** 2) ** 0.5)[:2]
+
+        return [city.cityName for city in nearest_cities]
+
+    def to_representation(self, instance):
+        nearest_cities = self.get_nearest_cities()
+        return {
+            'nearest_city_1': nearest_cities[0],
+            'nearest_city_2': nearest_cities[1]
+        }
