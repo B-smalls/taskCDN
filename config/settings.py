@@ -84,7 +84,7 @@ DATABASES = {
         'NAME': env.str('PG_DATABASE', 'postgres'),
         'USER': env.str('PG_USER', 'postgres'),
         'PASSWORD': env.str('PG_PASSWORD', 'postgres'),
-        'HOST': env.str('DB_HOST', 'localhost'),
+        'HOST': env.str('DB_HOST', 'db'),
         'PORT': env.str('DB_PORT', 5432),
     }
 }
@@ -145,6 +145,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
 STATIC_URL = 'static/'
+STATIC_ROOT = ''
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
