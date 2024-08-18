@@ -3,7 +3,7 @@ from django.db import transaction
 from rest_framework.exceptions import ParseError
 
 from coordinatesCity.models.city import City
-from utils.ExternalApi import getCoordinates
+from coordinatesCity.utils.ExternalApi import getCoordinates
 #from coordinatesCity.
 
 

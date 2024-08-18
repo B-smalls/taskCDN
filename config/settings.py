@@ -150,3 +150,28 @@ STATIC_URL = 'static/'
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+#########################
+# DRF SPECTACULAR
+#########################
+SPECTACULAR_SETTINGS = {
+    'TITLE': 'City',
+        'DESCRIPTION': 'Project for CDNvideo',
+    'VERSION': '1.0.0',
+
+    'SERVE_PERMISSIONS': [
+        'rest_framework.permissions.IsAuthenticated'
+    ],
+
+    'SERVE_AUTHENTICATION': [
+        'rest_framework.authentication.BasicAuthentication',
+    ],
+
+    'SWAGGER_UI_SETTINGS': {
+        'DeepLinking': True,
+        'DisplayOperationId': True,
+    },
+
+    'COMPONENT_SPLIT_REQUEST': True,
+    'SORT_OPERATIONS': False,
+}
