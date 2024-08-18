@@ -13,7 +13,7 @@ BASE_DIR = root()
 SECRET_KEY = env.str('SECRET_KEY')
 DEBUG = env.bool('DEBUG', default=False)
 ALLOWED_HOSTS = env.str('ALLOWED_HOSTS', default='').split(' ')
-
+API_KEY = env.str('API_KEY')
 
 
 # Application definition
