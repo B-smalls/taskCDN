@@ -4,7 +4,7 @@ from rest_framework.views import APIView
 from coordinatesCity.models.city import City
 from coordinatesCity.serializers import city
 from rest_framework.exceptions import NotFound, ParseError
-
+from rest_framework import generics
 
 from drf_spectacular.utils import extend_schema_view, extend_schema
 
@@ -21,7 +21,7 @@ class CityCreateView(generics.CreateAPIView):
         try:
             serializer = self.get_serializer(data=request.data)
             serializer.is_valid(raise_exception=True)
-            city = serializer.save()
+            serializer.save()
             return Response(serializer.data, status=status.HTTP_201_CREATED)
         except Exception as e:
             return Response({"error": "Failed to create city."}, status=status.HTTP_400_BAD_REQUEST)
@@ -30,20 +30,16 @@ class CityCreateView(generics.CreateAPIView):
     delete=extend_schema(request=city.CityDeleteSerializer,
                       summary='Удаление города', tags=['Города']),
 )
-# Представление для удаления записи
-class CityDeleteView(APIView):
+class CityDeleteView(generics.DestroyAPIView):
+    serializer_class = city.CityDeleteSerializer
+    queryset = City.objects.all()
+    lookup_field = 'cityName'  # Поле, по которому будет осуществляться удаление
 
-    def delete(self, request, *args, **kwargs):
-        try:
-            serializer = city.CityDeleteSerializer(data=request.data)
-            serializer.is_valid(raise_exception=True)
-            response_data = serializer.delete()
-            return Response(response_data, status=status.HTTP_200_OK)
-        except NotFound:
-            return Response({"error": "City not found."}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
-            return Response({"error": "Failed to delete city."}, status=status.HTTP_400_BAD_REQUEST)
-
+    def get_object(self):
+        # Переопределяем метод для поиска объекта по `cityName` вместо `id`
+        city_name = self.kwargs.get(self.lookup_field)
+        return City.objects.get(cityName=city_name)
+    
 
 @extend_schema_view(
     get=extend_schema(request=city.CityListSerializer,
@@ -89,7 +85,7 @@ class CityDetailView(generics.RetrieveAPIView):
 
 @extend_schema_view(
     post=extend_schema(request=city.NearestCitiesSerializer,
-                      summary='Добавление города', tags=['Города']),
+                      summary='Нахождение двух ближайших городов', tags=['Города']),
 )
 # Представление для нахождения двух ближайших городов
 class NearestCitiesView(APIView):
