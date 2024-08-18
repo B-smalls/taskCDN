@@ -58,3 +58,15 @@ class CityDeleteSerializer(serializers.Serializer):
         city.delete()
         return {"message": f"City '{city_name}' has been deleted."}
     
+
+# Сериализатор просмотра всех городов
+class CityListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = ['id', 'cityName', 'latitude', 'longitude']
+
+# Сериализатор просмотра отдельного города
+class CityDetailSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = City
+        fields = ['id', 'cityName', 'latitude', 'longitude']
